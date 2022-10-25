@@ -10,29 +10,13 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DaoFactory {
-/*    @Bean
-    public UserDao user() {
-        ConnectionMaker connectionMaker = new H2ConnectionMaker();
-        UserDao userDao = new UserDao(connectionMaker);
-        return userDao;
-    }*/
 
+    //H2
     @Bean
-    public UserDao userDao() {
-        return new UserDao(connectionMaker());
-    }
-
-    @Bean
-    public ConnectionMaker connectionMaker() {
-        return new H2ConnectionMaker();
-    }
-
-
-
-/* H2
-    UserDao H2UserDao(){
+    UserDao H2UserDao() {
         return new UserDao(h2DataSource());
     }
+
     @Bean
     DataSource h2DataSource() {
         return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
@@ -40,6 +24,27 @@ public class DaoFactory {
                 .addScript("classpath:jdbc/schema.sql")
                 .build();
     }
+/*    @Bean
+    public UserDao user() {
+        ConnectionMaker connectionMaker = new H2ConnectionMaker();
+        UserDao userDao = new UserDao(connectionMaker);
+        return userDao;
+    }*/
+/*
+
+    @Bean
+    public UserDao userDao() {
+        return new UserDao(connectionMaker());
+    }
 */
+/*
+
+    @Bean
+    public ConnectionMaker connectionMaker() {
+        return new H2ConnectionMaker();
+    }
+
+*/
+
 
 }

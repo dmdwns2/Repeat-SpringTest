@@ -23,6 +23,9 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public UserDao(){
+
+    }
     RowMapper<User> rowMapper = new RowMapper<User>() {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -40,7 +43,7 @@ public class UserDao {
     }
 
 
-    public User findById(String id) throws SQLException {
+    public User findById(String id)  {
         String sql = "select * from user where id = ?";
         return this.jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
@@ -58,7 +61,7 @@ public class UserDao {
     }
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args)  {
         UserDao userDao = new UserDao();
 //        userDao.add();
         User user = userDao.findById("6");
