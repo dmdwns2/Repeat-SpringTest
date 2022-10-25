@@ -3,6 +3,7 @@ package dao;
 import domain.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
@@ -49,9 +50,6 @@ public class UserDao {
 //        Connection c;
         try {
             Connection c = connectionMaker.makeConnection();
-            // DB접속 (ex sql workbeanch실행)
-//            c = DriverManager.getConnection(env.get("DB_HOST"),
-//                    env.get("DB_USER"), env.get("DB_PASSWORD"));
 
             // Query문 작성
             PreparedStatement pstmt = c.prepareStatement("SELECT * FROM users WHERE id = ?");
@@ -59,14 +57,18 @@ public class UserDao {
 
             // Query문 실행
             ResultSet rs = pstmt.executeQuery();
-            rs.next();
-            User user = new User(rs.getString("id"), rs.getString("name"),
-                    rs.getString("password"));
+            User user = null;
+            if(rs.next()) {
+                user = new User(rs.getString("id"), rs.getString("name"),
+                        rs.getString("password"));
+            }
+
 
             rs.close();
             pstmt.close();
             c.close();
-
+            if (user == null)
+                throw new EmptyResultDataAccessException(1); // user null 일때 exception 처리
             return user;
 
         } catch (SQLException e) {
