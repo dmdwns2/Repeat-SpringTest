@@ -5,14 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserDaoTest {
-
-
     UserDao userDao = new UserDao();
     User user1 = new User("1", "kyeonghwan", "1123");
     User user2 = new User("2", "sohyun", "1234");
@@ -29,7 +28,14 @@ class UserDaoTest {
     }
 
     @Test
-    void addAndSelect() throws SQLException, ClassNotFoundException {
+    void userNull(){
+        assertThrows(EmptyResultDataAccessException.class, () -> {
+            userDao.deleteALl();
+            userDao.findById("0");
+        });
+    }
+    @Test
+    void addAndSelect() throws SQLException{
 
         String id = "10";
         userDao.add(new User(id, "RaRa", "1234"));
@@ -38,10 +44,18 @@ class UserDaoTest {
     }
 
     @Test
-    void addAndGet() throws SQLException, ClassNotFoundException {
+    void addAndGet() throws SQLException{
         userDao.add(user1);
         assertEquals(1, user1.getId());
 
     }
+
+    @Test
+    void deleteAll() throws SQLException{
+        userDao.deleteALl();
+        assertEquals(0, userDao.getCount());
+    }
+
+
 
 }

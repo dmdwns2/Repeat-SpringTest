@@ -74,7 +74,7 @@ public class UserDao {
         }
     }
 
-    public void deleteALl() throws SQLException, ClassNotFoundException {
+    public void deleteALl() throws SQLException  {
         Connection c = null;
         PreparedStatement ps = null;
 
