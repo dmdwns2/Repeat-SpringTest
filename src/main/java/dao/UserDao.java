@@ -74,7 +74,7 @@ public class UserDao {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
         UserDao userDao = new UserDao();
 //        userDao.add();
         User user = userDao.findById("6");

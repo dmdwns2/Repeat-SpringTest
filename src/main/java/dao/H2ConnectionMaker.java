@@ -20,12 +20,5 @@ public class H2ConnectionMaker implements ConnectionMaker{
                 env.get("DB_USER"), env.get("DB_PASSWORD"));
         return c;
     }
-    @Bean
-    DataSource h2DataSource() {
-        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-                .setName("likelion-db;MODE=MySQL")
-                .addScript("classpath:jdbc/schema.sql")
-                .build();
-    }
 
 }
