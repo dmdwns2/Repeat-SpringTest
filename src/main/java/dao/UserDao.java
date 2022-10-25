@@ -104,14 +104,7 @@ public class UserDao {
     }
 
     public void deleteALl() throws SQLException  {
-        jdbcContext.workWithStatementStrategy(
-                new StatementStrategy() {
-                    public PreparedStatement makePreparedStatement(Connection connection) throws SQLException {
-                        return connection.prepareStatement("delete from user");
-                    }
-
-                }
-        );
+        this.jdbcContext.excuteSQL("delete from user");
     }
 
     public int getCount() throws SQLException {
@@ -147,6 +140,8 @@ public class UserDao {
             }
         }
     }
+
+
 
     public static void main(String[] args) throws SQLException {
         UserDao userDao = new UserDao();
