@@ -1,3 +1,4 @@
+/*
 package dao;
 
 import java.sql.Connection;
@@ -16,3 +17,4 @@ public class H2ConnectionMaker implements ConnectionMaker{
     }
 
 }
+*/
