@@ -1,6 +1,7 @@
 package dao;
 
 import domain.User;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,6 +15,12 @@ import java.util.Map;
 public class UserDao {
 
     private ConnectionMaker connectionMaker;
+
+    private JdbcContext jdbcContext;
+
+    public void setJdbcContext(JdbcContext jdbcContext) {
+        this.jdbcContext = jdbcContext;
+    }
 
     public UserDao() {
         connectionMaker = new H2ConnectionMaker();
@@ -51,26 +58,18 @@ public class UserDao {
         }
 
     }
-    public void add(User user) throws SQLException {
-        Map<String, String> env = System.getenv();
-        try {
-            Connection c = connectionMaker.makeConnection();
-
-            // Query문 작성
-            PreparedStatement pstmt = c.prepareStatement("INSERT INTO users(id, name, password) VALUES(?,?,?);");
-            pstmt.setString(1, user.getId());
-            pstmt.setString(2, user.getName());
-            pstmt.setString(3, user.getPassword());
-
-            // Query문 실행
-            pstmt.executeUpdate();
-
-            pstmt.close();
-            c.close();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void add(final User user) throws SQLException {
+        this.jdbcContext.workWithStatementStrategy(
+                new StatementStrategy() {
+                    public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                        PreparedStatement pstmt = c.prepareStatement("INSERT INTO user(id, name, password) VALUES(?,?,?);");
+                        pstmt.setString(1, user.getId());
+                        pstmt.setString(2, user.getName());
+                        pstmt.setString(3, user.getPassword());
+                        return pstmt;
+                    }
+                }
+        );
     }
 
     public User findById(String id) throws SQLException {
@@ -105,8 +104,14 @@ public class UserDao {
     }
 
     public void deleteALl() throws SQLException  {
-        StatementStrategy st = new DeleteAllStrategy();
-        jdbcContextWithStatementStrategy(st);
+        jdbcContext.workWithStatementStrategy(
+                new StatementStrategy() {
+                    public PreparedStatement makePreparedStatement(Connection connection) throws SQLException {
+                        return connection.prepareStatement("delete from user");
+                    }
+
+                }
+        );
     }
 
     public int getCount() throws SQLException {
