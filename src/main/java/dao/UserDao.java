@@ -22,7 +22,7 @@ public class UserDao {
         this.connectionMaker = connectionMaker;
     }
 
-    public void add(User user) throws ClassNotFoundException, SQLException{
+    public void add(User user) throws SQLException {
         Map<String, String> env = System.getenv();
         try {
             Connection c = connectionMaker.makeConnection();
@@ -44,7 +44,7 @@ public class UserDao {
         }
     }
 
-    public User findById(String id) throws ClassNotFoundException,SQLException{
+    public User findById(String id) throws SQLException {
         Map<String, String> env = System.getenv();
 //        Connection c;
         try {
@@ -74,14 +74,64 @@ public class UserDao {
         }
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public void deleteALl() throws SQLException, ClassNotFoundException {
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try {
+            c = connectionMaker.makeConnection();
+            StatementStrategy statementStrategy = new DeleteAllStrategy();
+            ps = statementStrategy.makePreparedStatement(c);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        ps.executeUpdate();
+
+        ps.close();
+        c.close();
+    }
+
+    public int getCount() throws SQLException {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            c = connectionMaker.makeConnection();
+            ps = c.prepareStatement("select count(*) from user");
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                }
+            }
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws SQLException {
         UserDao userDao = new UserDao();
 //        userDao.add();
         User user = userDao.findById("6");
         System.out.println(user.getName());
     }
-
-
-
 
 }

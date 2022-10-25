@@ -2,17 +2,32 @@ package dao;
 
 import domain.User;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 
+@Configuration
 public class DaoFactory {
+/*    @Bean
     public UserDao user() {
         ConnectionMaker connectionMaker = new H2ConnectionMaker();
         UserDao userDao = new UserDao(connectionMaker);
         return userDao;
+    }*/
+
+    @Bean
+    public UserDao userDao() {
+        return new UserDao(connectionMaker());
     }
+
+    @Bean
+    public ConnectionMaker connectionMaker() {
+        return new H2ConnectionMaker();
+    }
+
+
 
 /* H2
     UserDao H2UserDao(){

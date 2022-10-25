@@ -6,6 +6,6 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public interface ConnectionMaker {
-    public Connection makeConnection() throws SQLException,ClassNotFoundException;/**/
+    public Connection makeConnection() throws SQLException;/**/
 
 }
