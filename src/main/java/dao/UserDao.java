@@ -3,29 +3,29 @@ package dao;
 import domain.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Map;
 
 public class UserDao {
 
-    private Connection makeConnection() throws SQLException {
-        Map<String, String> env = System.getenv();
-        // DB접속 (ex sql workbeanch실행)
-        Connection c = DriverManager.getConnection(env.get("DB_HOST"),
-                env.get("DB_USER"), env.get("DB_PASSWORD"));
-        return c;
+    private ConnectionMaker connectionMaker;
+
+    public UserDao() {
+        connectionMaker = new H2ConnectionMaker();
     }
 
-    public void add(User user) {
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
+
+    public void add(User user) throws ClassNotFoundException, SQLException{
         Map<String, String> env = System.getenv();
         try {
-            Connection c = makeConnection();
-/*
-            // DB접속 (ex sql workbeanch실행)
-            Connection c = DriverManager.getConnection(env.get("DB_HOST"),
-                    env.get("DB_USER"), env.get("DB_PASSWORD"));
-*/
+            Connection c = connectionMaker.makeConnection();
 
             // Query문 작성
             PreparedStatement pstmt = c.prepareStatement("INSERT INTO users(id, name, password) VALUES(?,?,?);");
@@ -44,11 +44,11 @@ public class UserDao {
         }
     }
 
-    public User findById(String id) {
+    public User findById(String id) throws ClassNotFoundException,SQLException{
         Map<String, String> env = System.getenv();
 //        Connection c;
         try {
-            Connection c = makeConnection();
+            Connection c = connectionMaker.makeConnection();
             // DB접속 (ex sql workbeanch실행)
 //            c = DriverManager.getConnection(env.get("DB_HOST"),
 //                    env.get("DB_USER"), env.get("DB_PASSWORD"));
@@ -80,4 +80,8 @@ public class UserDao {
         User user = userDao.findById("6");
         System.out.println(user.getName());
     }
+
+
+
+
 }
