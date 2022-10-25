@@ -1,5 +1,6 @@
 package dao;
 
+import domain.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -12,7 +13,11 @@ public class DaoFactory {
         UserDao userDao = new UserDao(connectionMaker);
         return userDao;
     }
-    // H2
+
+/* H2
+    UserDao H2UserDao(){
+        return new UserDao(h2DataSource());
+    }
     @Bean
     DataSource h2DataSource() {
         return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
@@ -20,5 +25,6 @@ public class DaoFactory {
                 .addScript("classpath:jdbc/schema.sql")
                 .build();
     }
+*/
 
 }
