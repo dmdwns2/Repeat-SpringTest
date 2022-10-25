@@ -1,5 +1,6 @@
 package domain;
 
+import dao.H2ConnectionMaker;
 public class User {
     private String id;
     private String name;
