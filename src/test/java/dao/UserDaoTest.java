@@ -41,13 +41,13 @@ class UserDaoTest {
         System.out.println("Before Each");
     }
 
-/*    @Test
+    @Test
     void userNull(){
         assertThrows(EmptyResultDataAccessException.class, () -> {
             userDao.deleteALl();
             userDao.findById("0");
         });
-    }*/
+    }
     @Test
     void addAndSelect() throws SQLException{
 
@@ -82,6 +82,13 @@ class UserDaoTest {
         userDao.add(user3);
         assertEquals(3, userDao.getCount());
 
+    }
+    @Test
+    void findById() {
+//        jdbc 테플릿 사용으로 인한 변경
+        assertThrows(EmptyResultDataAccessException.class, () -> {
+            userDao.findById("30");
+        });
     }
     @Test
     @DisplayName("없을 때 빈 리스트 리턴 하느지 , 있을 때 개수만큼 리턴 하는지")

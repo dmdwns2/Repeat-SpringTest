@@ -1,19 +1,19 @@
 package dao;
 
 import domain.User;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
+/*import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;*/
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+/*import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;*/
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
-import java.util.Map;
+/*import java.util.Map;*/
 
 public class UserDao {
 
