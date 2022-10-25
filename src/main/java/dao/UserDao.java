@@ -23,6 +23,34 @@ public class UserDao {
         this.connectionMaker = connectionMaker;
     }
 
+    public void jdbcContextWithStatementStrategy (StatementStrategy stmt) throws SQLException{
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try {
+            c = connectionMaker.makeConnection();
+            StatementStrategy statementStrategy = new DeleteAllStrategy();
+            ps = statementStrategy.makePreparedStatement(c);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                }
+            }
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (Exception e) {
+                }
+            }
+        }
+
+    }
     public void add(User user) throws SQLException {
         Map<String, String> env = System.getenv();
         try {
@@ -77,35 +105,8 @@ public class UserDao {
     }
 
     public void deleteALl() throws SQLException  {
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try {
-            c = connectionMaker.makeConnection();
-            StatementStrategy statementStrategy = new DeleteAllStrategy();
-            ps = statementStrategy.makePreparedStatement(c);
-
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (Exception e) {
-                }
-            }
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (Exception e) {
-                }
-            }
-        }
-        ps.executeUpdate();
-
-        ps.close();
-        c.close();
+        StatementStrategy st = new DeleteAllStrategy();
+        jdbcContextWithStatementStrategy(st);
     }
 
     public int getCount() throws SQLException {
