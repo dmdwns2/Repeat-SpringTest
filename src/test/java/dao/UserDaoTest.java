@@ -45,17 +45,17 @@ class UserDaoTest {
 
     @Test
     void addAndGet() throws SQLException{
+        userDao.deleteALl();
+        assertEquals(0, userDao.getCount());
+
         userDao.add(user1);
         assertEquals(1, user1.getId());
 
-    }
+        User user = userDao.findById(user1.getId());
 
-    @Test
-    void deleteAll() throws SQLException{
-        userDao.deleteALl();
-        assertEquals(0, userDao.getCount());
+        assertEquals(user1.getName(), user.getName());
+        assertEquals(user1.getPassword(), user.getPassword());
     }
-
 
 
 }
