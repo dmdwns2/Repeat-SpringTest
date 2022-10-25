@@ -1,6 +1,8 @@
 package dao;
 
 import domain.User;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.sql.*;
 import java.util.Map;
@@ -58,7 +60,17 @@ public class UserDao {
             throw new RuntimeException(e);
         }
     }
+    @Configuration
+    public class UserDaoFactory2 {
 
+        @Bean
+        public UserDao05Interface userDao05Interface() {
+            return new UserDao05Interface(() -> {
+                return null;
+            });
+        }
+
+    }
     public static void main(String[] args) {
         UserDao userDao = new UserDao();
 //        userDao.add();
